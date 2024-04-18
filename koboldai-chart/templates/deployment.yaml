@@ -1,0 +1,25 @@
+# koboldai-chart/templates/deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "koboldai-chart.fullname" . }}
+  labels:
+    {{- include "koboldai-chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "koboldai-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "koboldai-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "koboldai/koboldcpp:latest"
+          ports:
+            - name: http
+              containerPort: 80
+
